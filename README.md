@@ -22,7 +22,7 @@ How should I apply this fork?
 Here is an example of how to extend `DOMDocument` and `DOMElement` and 
 effectively use this fork.
 
-Firstly, here is are awesome `DOMElement`:
+Firstly, here is our awesome `DOMElement`:
 
 ```
 <?php
@@ -44,7 +44,7 @@ class ExtDOMDocument extends \DOMDocument
 }
 ```
 
-With it's associative `DOMElement`:
+With its associative `DOMElement`:
 
 ```
 <?php
