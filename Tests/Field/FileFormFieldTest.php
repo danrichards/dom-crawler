@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\DomCrawler\Tests\Field;
+namespace Dan\Symfony\Component\DomCrawler\Tests\Field;
 
-use Symfony\Component\DomCrawler\Field\FileFormField;
+use Dan\Symfony\Component\DomCrawler\Field\FileFormField;
 
 class FileFormFieldTest extends FormFieldTestCase
 {

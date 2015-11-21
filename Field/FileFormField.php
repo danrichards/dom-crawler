@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\DomCrawler\Field;
+namespace Dan\Symfony\Component\DomCrawler\Field;
 
 /**
  * FileFormField represents a file form field (an HTML file input tag).
