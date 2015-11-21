@@ -1,7 +1,7 @@
 {
   "name": "dan/dom-crawler",
   "type": "library",
-  "description": "Symfony DomCrawler Fork for AiCrawler",
+  "description": "Symfony DomCrawler *fork for supplying your own DOMDocument / DOMElement classes.",
   "keywords": [],
   "homepage": "https://danrichards.net/",
   "license": "MIT",
@@ -20,7 +20,7 @@
     }
   ],
   "require": {
-    "php": ">=5.5.9",
+    "php": ">=5.3.9",
     "symfony/polyfill-mbstring": "~1.0",
     "symfony/css-selector": "2.7.*"
   },
@@ -30,10 +30,5 @@
       "/Tests/"
     ]
   },
-  "minimum-stability": "dev",
-  "extra": {
-    "branch-alias": {
-      "dev-master": "3.0-dev"
-    }
-  }
+  "minimum-stability": "stable"
 }
