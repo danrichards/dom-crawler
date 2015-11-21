@@ -38,7 +38,7 @@ class Crawler extends \SplObjectStorage
     /**
      * @var string The base href value
      */
-    private $baseHref;
+    protected $baseHref;
 
     /**
      * Constructor.
@@ -825,7 +825,7 @@ class Crawler extends \SplObjectStorage
      *
      * @return Crawler
      */
-    private function filterRelativeXPath($xpath)
+    protected function filterRelativeXPath($xpath)
     {
         $prefixes = $this->findNamespacePrefixes($xpath);
 
