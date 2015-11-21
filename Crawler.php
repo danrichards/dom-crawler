@@ -1,21 +1,15 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Dan\Symfony\Component\DomCrawler;
 
 use Symfony\Component\CssSelector\CssSelector;
 
 /**
- * Crawler eases navigation of a list of \DOMElement objects.
+ * Symfony DOMCrawler modified so it's more open to extension.
  *
+ * @see registerDOMDocumentClass()
+ *
+ * @author Dan Richards <danrichardsri@gmail.com>
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class Crawler extends \SplObjectStorage
@@ -41,16 +35,23 @@ class Crawler extends \SplObjectStorage
     protected $baseHref;
 
     /**
+     * @var string $domDocumentClass
+     */
+    protected $domDocumentClass = '\\DOMDocument';
+
+    /**
      * Constructor.
      *
-     * @param mixed  $node       A Node to use as the base for the crawling
+     * @param mixed $node A Node to use as the base for the crawling
      * @param string $currentUri The current URI
-     * @param string $baseHref   The base href value
+     * @param string $baseHref The base href value
+     * @param string $domDocumentClass
      */
-    public function __construct($node = null, $currentUri = null, $baseHref = null)
+    public function __construct($node = null, $currentUri = null, $baseHref = null, $domDocumentClass = '\\DOMDocument')
     {
         $this->uri = $currentUri;
         $this->baseHref = $baseHref ?: $currentUri;
+        $this->domDocumentClass = $domDocumentClass;
 
         $this->add($node);
     }
@@ -77,7 +78,7 @@ class Crawler extends \SplObjectStorage
     {
         if ($node instanceof \DOMNodeList) {
             $this->addNodeList($node);
-        } elseif ($node instanceof \DOMNode) {
+        } elseif (is_a($node, \DOMNode::class)) {
             $this->addNode($node);
         } elseif (is_array($node)) {
             $this->addNodes($node);
@@ -153,13 +154,14 @@ class Crawler extends \SplObjectStorage
         $internalErrors = libxml_use_internal_errors(true);
         $disableEntities = libxml_disable_entity_loader(true);
 
-        $dom = new \DOMDocument('1.0', $charset);
+
+        $dom = new $this->domDocumentClass('1.0', $charset);
         $dom->validateOnParse = true;
 
         set_error_handler(function () {throw new \Exception();});
 
         try {
-            // Convert charset to HTML-entities to work around bugs in DOMDocument::loadHTML()
+            // Convert charset to HTML-entities to work around bugs in \DOMDocument::loadHTML()
 
             if (function_exists('mb_convert_encoding')) {
                 $content = mb_convert_encoding($content, 'HTML-ENTITIES', $charset);
@@ -240,7 +242,7 @@ class Crawler extends \SplObjectStorage
         $internalErrors = libxml_use_internal_errors(true);
         $disableEntities = libxml_disable_entity_loader(true);
 
-        $dom = new \DOMDocument('1.0', $charset);
+        $dom = new $this->domDocumentClass('1.0', $charset);
         $dom->validateOnParse = true;
 
         if ('' !== trim($content)) {
@@ -256,13 +258,14 @@ class Crawler extends \SplObjectStorage
     /**
      * Adds a \DOMDocument to the list of nodes.
      *
-     * @param \DOMDocument $dom A \DOMDocument instance
+     * @param $dom A \DOMDocument instance
      */
-    public function addDocument(\DOMDocument $dom)
+    public function addDocument($dom)
     {
-        if ($dom->documentElement) {
-            $this->addNode($dom->documentElement);
+        if (! is_a($dom, \DOMDocument::class)) {
+            throw new \InvalidArgumentException("Instance / descendant of \DOMDocument required.");
         }
+        $this->addNode($dom->documentElement);
     }
 
     /**
@@ -273,7 +276,7 @@ class Crawler extends \SplObjectStorage
     public function addNodeList(\DOMNodeList $nodes)
     {
         foreach ($nodes as $node) {
-            if ($node instanceof \DOMNode) {
+            if (is_a($node, \DOMNode::class)) {
                 $this->addNode($node);
             }
         }
@@ -298,7 +301,7 @@ class Crawler extends \SplObjectStorage
      */
     public function addNode(\DOMNode $node)
     {
-        if ($node instanceof \DOMDocument) {
+        if (is_a($node, \DOMDocument::class)) {
             $this->attach($node->documentElement);
         } else {
             $this->attach($node);
@@ -638,6 +641,19 @@ class Crawler extends \SplObjectStorage
     }
 
     /**
+     * Register \DOMDocument which we will crawl.
+     *
+     * @param string $class
+     */
+    public function registerDOMDocumentClass($class)
+    {
+        if (! is_a($class, \DOMDocument::class, true)) {
+            throw new \InvalidArgumentException("Instance / descendant of \DOMDocument required.");
+        }
+        $this->domDocumentClass = $class;
+    }
+
+    /**
      * Filters the list of nodes with a CSS selector.
      *
      * This method only works if you have installed the CssSelector Symfony Component.
@@ -668,7 +684,7 @@ class Crawler extends \SplObjectStorage
     public function selectLink($value)
     {
         $xpath = sprintf('descendant-or-self::a[contains(concat(\' \', normalize-space(string(.)), \' \'), %s) ', static::xpathLiteral(' '.$value.' ')).
-                            sprintf('or ./img[contains(concat(\' \', normalize-space(string(@alt)), \' \'), %s)]]', static::xpathLiteral(' '.$value.' '));
+            sprintf('or ./img[contains(concat(\' \', normalize-space(string(@alt)), \' \'), %s)]]', static::xpathLiteral(' '.$value.' '));
 
         return $this->filterRelativeXPath($xpath);
     }
@@ -684,8 +700,8 @@ class Crawler extends \SplObjectStorage
     {
         $translate = 'translate(@type, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz")';
         $xpath = sprintf('descendant-or-self::input[((contains(%s, "submit") or contains(%s, "button")) and contains(concat(\' \', normalize-space(string(@value)), \' \'), %s)) ', $translate, $translate, static::xpathLiteral(' '.$value.' ')).
-                         sprintf('or (contains(%s, "image") and contains(concat(\' \', normalize-space(string(@alt)), \' \'), %s)) or @id=%s or @name=%s] ', $translate, static::xpathLiteral(' '.$value.' '), static::xpathLiteral($value), static::xpathLiteral($value)).
-                         sprintf('| descendant-or-self::button[contains(concat(\' \', normalize-space(string(.)), \' \'), %s) or @id=%s or @name=%s]', static::xpathLiteral(' '.$value.' '), static::xpathLiteral($value), static::xpathLiteral($value));
+            sprintf('or (contains(%s, "image") and contains(concat(\' \', normalize-space(string(@alt)), \' \'), %s)) or @id=%s or @name=%s] ', $translate, static::xpathLiteral(' '.$value.' '), static::xpathLiteral($value), static::xpathLiteral($value)).
+            sprintf('| descendant-or-self::button[contains(concat(\' \', normalize-space(string(.)), \' \'), %s) or @id=%s or @name=%s]', static::xpathLiteral(' '.$value.' '), static::xpathLiteral($value), static::xpathLiteral($value));
 
         return $this->filterRelativeXPath($xpath);
     }
@@ -952,6 +968,10 @@ class Crawler extends \SplObjectStorage
      */
     private function createDOMXPath(\DOMDocument $document, array $prefixes = array())
     {
+        if (! is_a($document, \DOMDocument::class)) {
+            throw new \InvalidArgumentException("Instance / descendant of \DOMDocument is required.");
+        }
+
         $domxpath = new \DOMXPath($document);
 
         foreach ($prefixes as $prefix) {

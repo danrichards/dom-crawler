@@ -20,7 +20,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         // Ensure that the private helper class FormFieldRegistry is loaded
-        class_exists('Symfony\\Component\\DomCrawler\\Form');
+        class_exists('Dan\\Symfony\\Component\\DomCrawler\\Form');
     }
 
     public function testConstructorThrowsExceptionIfTheNodeHasNoFormAncestor()
@@ -639,7 +639,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $form = $this->createForm('<form method="post"><input type="text" name="bar" value="bar" /><input type="submit" /></form>');
 
-        $this->assertInstanceOf('Symfony\\Component\\DomCrawler\\Field\\InputFormField', $form->get('bar'), '->get() returns the field object associated with the given name');
+        $this->assertInstanceOf('Dan\\Symfony\\Component\\DomCrawler\\Field\\InputFormField', $form->get('bar'), '->get() returns the field object associated with the given name');
 
         try {
             $form->get('foo');
@@ -655,7 +655,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $fields = $form->all();
         $this->assertCount(1, $fields, '->all() return an array of form field objects');
-        $this->assertInstanceOf('Symfony\\Component\\DomCrawler\\Field\\InputFormField', $fields['bar'], '->all() return an array of form field objects');
+        $this->assertInstanceOf('Dan\\Symfony\\Component\\DomCrawler\\Field\\InputFormField', $fields['bar'], '->all() return an array of form field objects');
     }
 
     public function testSubmitWithoutAFormButton()
@@ -856,7 +856,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected function getFormFieldMock($name, $value = null)
     {
         $field = $this
-            ->getMockBuilder('Symfony\\Component\\DomCrawler\\Field\\FormField')
+            ->getMockBuilder('Dan\\Symfony\\Component\\DomCrawler\\Field\\FormField')
             ->setMethods(array('getName', 'getValue', 'setValue', 'initialize'))
             ->disableOriginalConstructor()
             ->getMock()
