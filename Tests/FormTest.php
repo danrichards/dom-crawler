@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\DomCrawler\Tests;
+namespace Dan\Symfony\Component\DomCrawler\Tests;
 
-use Symfony\Component\DomCrawler\Form;
-use Symfony\Component\DomCrawler\FormFieldRegistry;
-use Symfony\Component\DomCrawler\Field;
+use Dan\Symfony\Component\DomCrawler\Form;
+use Dan\Symfony\Component\DomCrawler\FormFieldRegistry;
+use Dan\Symfony\Component\DomCrawler\Field;
 
 class FormTest extends \PHPUnit_Framework_TestCase
 {

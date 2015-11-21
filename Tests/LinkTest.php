@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\DomCrawler\Tests;
+namespace Dan\Symfony\Component\DomCrawler\Tests;
 
-use Symfony\Component\DomCrawler\Link;
+use Dan\Symfony\Component\DomCrawler\Link;
 
 class LinkTest extends \PHPUnit_Framework_TestCase
 {

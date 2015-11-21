@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\DomCrawler\Tests\Field;
+namespace Dan\Symfony\Component\DomCrawler\Tests\Field;
 
 class FormFieldTestCase extends \PHPUnit_Framework_TestCase
 {

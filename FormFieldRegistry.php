@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\DomCrawler;
+namespace Dan\Symfony\Component\DomCrawler;
 
-use Symfony\Component\DomCrawler\Field\FormField;
+use Dan\Symfony\Component\DomCrawler\Field\FormField;
 
 /**
  * This is an internal class that must not be used directly.

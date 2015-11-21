@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\DomCrawler\Tests;
+namespace Dan\Symfony\Component\DomCrawler\Tests;
 
-use Symfony\Component\DomCrawler\Crawler;
+use Dan\Symfony\Component\DomCrawler\Crawler;
 
 class CrawlerTest extends \PHPUnit_Framework_TestCase
 {
