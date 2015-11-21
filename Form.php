@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\DomCrawler;
+namespace Dan\Symfony\Component\DomCrawler;
 
 use Dan\Symfony\Component\DomCrawler\Field\ChoiceFormField;
 use Dan\Symfony\Component\DomCrawler\Field\FormField;
