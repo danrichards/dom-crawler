@@ -38,7 +38,7 @@ class Crawler implements \Countable, \IteratorAggregate
     /**
      * @var string The base href value
      */
-    private $baseHref;
+    protected $baseHref;
 
     /**
      * @var \DOMDocument|null
@@ -824,7 +824,7 @@ class Crawler implements \Countable, \IteratorAggregate
      *
      * @return Crawler
      */
-    private function filterRelativeXPath($xpath)
+    protected function filterRelativeXPath($xpath)
     {
         $prefixes = $this->findNamespacePrefixes($xpath);
 
