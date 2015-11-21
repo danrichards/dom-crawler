@@ -1,11 +1,15 @@
 {
-    "name": "symfony/dom-crawler",
+    "name": "dan/dom-crawler",
     "type": "library",
-    "description": "Symfony DomCrawler Component",
+    "description": "Symfony DomCrawler Fork for AiCrawler",
     "keywords": [],
-    "homepage": "https://symfony.com",
+    "homepage": "https://danrichards.net/",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Dan Richards",
+            "email": "danrichardsri@gmail.com"
+        },
         {
             "name": "Fabien Potencier",
             "email": "fabien@symfony.com"
