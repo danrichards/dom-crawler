@@ -57,6 +57,19 @@ class Crawler extends \SplObjectStorage
     }
 
     /**
+     * Register \DOMDocument which we will crawl.
+     *
+     * @param string $class
+     */
+    public function registerDOMDocumentClass($class)
+    {
+        if (! is_a($class, \DOMDocument::class, true)) {
+            throw new \InvalidArgumentException("Instance / descendant of \DOMDocument required.");
+        }
+        $this->domDocumentClass = $class;
+    }
+
+    /**
      * Removes all the nodes.
      */
     public function clear()
@@ -641,19 +654,6 @@ class Crawler extends \SplObjectStorage
     }
 
     /**
-     * Register \DOMDocument which we will crawl.
-     *
-     * @param string $class
-     */
-    public function registerDOMDocumentClass($class)
-    {
-        if (! is_a($class, \DOMDocument::class, true)) {
-            throw new \InvalidArgumentException("Instance / descendant of \DOMDocument required.");
-        }
-        $this->domDocumentClass = $class;
-    }
-
-    /**
      * Filters the list of nodes with a CSS selector.
      *
      * This method only works if you have installed the CssSelector Symfony Component.
@@ -959,14 +959,14 @@ class Crawler extends \SplObjectStorage
     }
 
     /**
-     * @param \DOMDocument $document
+     * @param $document
      * @param array        $prefixes
      *
      * @return \DOMXPath
      *
      * @throws \InvalidArgumentException
      */
-    private function createDOMXPath(\DOMDocument $document, array $prefixes = array())
+    private function createDOMXPath($document, array $prefixes = array())
     {
         if (! is_a($document, \DOMDocument::class)) {
             throw new \InvalidArgumentException("Instance / descendant of \DOMDocument is required.");
@@ -1027,7 +1027,7 @@ class Crawler extends \SplObjectStorage
      *
      * @return static
      */
-    private function createSubCrawler($nodes)
+    protected function createSubCrawler($nodes)
     {
         $crawler = new static($nodes, $this->uri, $this->baseHref);
 
