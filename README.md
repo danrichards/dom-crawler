@@ -70,7 +70,7 @@ $crawler->registerDOMDocumentClass('My\\Awesome\\ExtDOMDocument');
 $crawler->addContent('<html><body><p>Hello World!</p></body></html>');
 
 $filter = $crawler->filterXPath('descendant-or-self::body/p')->first();
-print get_class($filter->getNode(0)); // My\Awesome\ExtDOMDocument
+print get_class($filter->getNode(0)); // My\Awesome\ExtDOMElement
 ```
 
 If you are also using the CssSelector component, you can use CSS Selectors
@@ -86,7 +86,7 @@ $crawler->addContent('<html><body><p>Hello World!</p></body></html>');
 print $crawler->filter('body > p')->text();
 
 $filter = $crawler->filterXPath('descendant-or-self::body/p')->first();
-print get_class($filter->getNode(0)); // My\Awesome\ExtDOMDocument
+print get_class($filter->getNode(0)); // My\Awesome\ExtDOMElement
 ```
 
 Unit Tests
